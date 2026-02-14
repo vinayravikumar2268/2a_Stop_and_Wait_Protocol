@@ -30,7 +30,31 @@ while True:
 ~~~
 client:
 ~~~
+import socket
+import time
+client = socket.socket()
+client.connect(('localhost', 8000))
+client.settimeout(5)  
+while True:
+    msg = input("Enter a message (or type 'exit' to quit): ")
+    client.send(msg.encode())  
+    if msg.lower() == 'exit':  
+        print("Connection closed by client")
+        client.close()
+        break
+    try:
+        ack = client.recv(1024).decode()
+        if ack == "ACK":
+            print(f"Server acknowledged: {ack}")
+    except socket.timeout:
+        print("No ACK received, retransmitting...")
+        continue
+~~~  
+
 
 ## OUTPUT
+<img width="1501" height="274" alt="Screenshot 2026-02-14 110659" src="https://github.com/user-attachments/assets/592daa13-2827-4fd7-a586-0dd8026e76c0" />
+<img width="1520" height="257" alt="Screenshot 2026-02-14 110755" src="https://github.com/user-attachments/assets/006efbd5-a3b3-44d0-8df8-d73bfe38a182" />
+
 ## RESULT
 Thus, python program to perform stop and wait protocol was successfully executed.
